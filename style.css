@@ -20,17 +20,17 @@
       0px 14.7px 16.5px -1.8px hsl(var(--shadow-color) / 0.1),
       0.1px 22.3px 25.1px -2.1px hsl(var(--shadow-color) / 0.1),
       0.1px 32.9px 37px -2.5px hsl(var(--shadow-color) / 0.1);
-  }
-  
-  * {
-    box-sizing: border-box;
-  }
+    }
+    
+    * {
+      box-sizing: border-box;
+    }
 
-  body {
-  width: 600px;
-  height: 120px;
-  margin: 0;
-
+    
+    body {
+      height: 120px;
+      margin: 0;
+      width: 600px;
 }
 
 .bg1 {
@@ -59,12 +59,12 @@
     #1c2d3c,
     #1b153f,
     #210240
-  );
-}
-
-button {
-  font-size: 16px;
-  height: 34px;
+    );
+  }
+  
+  .action-btns {
+    font-size: 16px;
+    height: 34px;
   width: 34px;
   background: rgba(226, 222, 226, 0.596);
   border-radius: 50%;
@@ -73,16 +73,16 @@ button {
   border: none;
   box-shadow: var(--shadow-elevation-medium);
   margin: 2px;
-
+  
 }
 
-button:hover {
+.action-btns:hover {
   /* border: 3px solid rgb(116, 167, 112); */
   box-shadow: var(--shadow-elevation-low);
-  background: rgba(226, 222, 226, 0.945);
+  background: rgba(226, 222, 226, 0.158);
 }
 
-button:active {
+.action-btns:active {
   background: rgb(221, 224, 10);
 }
 
@@ -93,4 +93,103 @@ button:active {
   height: 100%;
   border: 1px solid rgba(0, 128, 0, 0.274);
   /* margin-bottom: 20px; */
+}
+
+.egg {
+  width: 40px;
+  height: 40px;
+}
+/* Modal Section --------------------------------------------------*/
+
+.modal {
+  position: fixed;
+  z-index: 1;
+  left: 0;
+  top: 0;
+  width: 100%;
+  height: 100%;
+  overflow: hidden;
+  background: linear-gradient(
+    0deg,
+    #573e1a 10%,
+    #24c81b 5%,
+    #a7c2e0,
+    #7698cf,
+    #0944b1
+    );
+    color: rgb(206, 152, 16);
+  }
+  
+  .modal-content {
+    display: flex;
+    justify-content: space-around;
+    align-items: center;
+    color: rgb(206, 152, 16);
+  }
+
+
+#modal-start {
+  display: none;
+  color: rgb(206, 152, 16);
+  border:rgb(206, 152, 16) 3px groove;
+}
+
+#modal-play-again {
+  display: block;
+  color: rgb(209, 3, 3);
+  border:rgb(206, 152, 16) 3px groove;
+}
+
+.modal-play-again-button {
+  display: flex;
+  position: relative;
+  justify-content: center;
+  align-items: center;
+  /* text-align: center; */
+  width: 100%;
+  height: 35px;
+  border-radius: 0;
+  border: 2px groove rgb(206, 152, 16);
+  background: rgba(34, 119, 199, 0.863);
+  color: rgb(206, 152, 16);
+  font-size: 18px;
+  font-weight: bolder;
+  /* padding-bottom: 9%; */
+}
+
+.modal-play-again-button:active {
+  background: rgba(8, 38, 66, 0.952);
+}
+
+
+#modal-death {
+  display: none;
+}
+
+#modal-button {
+  width: 300px;
+}
+  
+  .modal-start-button {
+  width: 100%;
+  height: 80%;
+  position: relative;
+  border-radius: 0;
+  border: 2px groove rgb(206, 152, 16);
+  display: flex;
+  text-align: center;
+  justify-content: center;
+  align-items: center;
+  background: rgba(34, 119, 199, 0.863);
+  padding-bottom: 9%;
+}
+
+.modal-start-button:active {
+  background: rgba(206, 152, 16, 0.993);
+}
+
+/* ----------------------------------------------------------------- */
+
+h1,h2,h3,h4,h5,h6 {
+  text-align: center;
 }
