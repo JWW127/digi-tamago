@@ -8,14 +8,31 @@
     <script src="popup.js"></script>
   </head>
   <body>
+    <div id="modal-start" class="modal">
+      <h1>Choose A Egg</h1>
+      <div class="modal-content">
+        <button class="modal-start-button"><img src="assets/eggs/Orange.png" alt="orange-egg" class="egg "></button>
+        <button class="modal-start-button"><img src="assets/eggs/Purple.png" alt="purple-egg" class="egg "></button>
+        <button class="modal-start-button"><img src="assets/eggs/Green.png" alt="green-egg" class="egg "></button>
+      </div>
+    </div>
+    <div id="modal-play-again" class="modal">
+      <h2>💀 Your DigiTamago Died 💀</h2>
+      <h4>Play Again?</h4>
+      <div class="modal-content">
+        <button class="modal-play-again-button">YES</button>
+        <button class="modal-play-again-button">No</button>
+      </div>
+    </div>
+    
     <div class="bg1">
       <div class="board">
         <canvas id="can" width="600" height="110px"></canvas>
-        <button id="food">🍗</button>
-        <button id="poop">🚽</button>
-        <button id="play">⚽</button>
-        <button id="sleep">😴</button>
-        <button id="train">🔮</button>
+        <button class="action-btns" id="food">🍗</button>
+        <button class="action-btns" id="poop">🚽</button>
+        <button class="action-btns" id="play">⚽</button>
+        <button class="action-btns" id="sleep">😴</button>
+        <button class="action-btns" id="train">🔮</button>
       </div>
     </div>
   </body>
