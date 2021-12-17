@@ -1,9 +1,14 @@
 <!DOCTYPE html>
 <html lang="en">
-  <link rel="stylesheet" href="style.css" />
   <head>
     <meta charset="UTF-8" />
-
+    <link rel="preconnect" href="https://fonts.googleapis.com" />
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin />
+    <link
+      href="https://fonts.googleapis.com/css2?family=Bungee+Inline&display=swap"
+      rel="stylesheet"
+    />
+    <link rel="stylesheet" href="style.css" />
     <title>DigiTamago</title>
     <script src="popup.js"></script>
   </head>
@@ -11,9 +16,15 @@
     <div id="modal-start" class="modal">
       <h1>Choose A Egg</h1>
       <div class="modal-content">
-        <button class="modal-start-button"><img src="assets/eggs/Orange.png" alt="orange-egg" class="egg "></button>
-        <button class="modal-start-button"><img src="assets/eggs/Purple.png" alt="purple-egg" class="egg "></button>
-        <button class="modal-start-button"><img src="assets/eggs/Green.png" alt="green-egg" class="egg "></button>
+        <button class="modal-start-button" id="orange-egg">
+          <img src="assets/eggs/Orange.png" alt="orange-egg" class="egg" />
+        </button>
+        <button class="modal-start-button">
+          <img src="assets/eggs/Purple.png" alt="purple-egg" class="egg" />
+        </button>
+        <button class="modal-start-button">
+          <img src="assets/eggs/Green.png" alt="green-egg" class="egg" />
+        </button>
       </div>
     </div>
     <div id="modal-play-again" class="modal">
@@ -24,7 +35,7 @@
         <button class="modal-play-again-button">No</button>
       </div>
     </div>
-    
+
     <div class="bg1">
       <div class="board">
         <canvas id="can" width="600" height="110px"></canvas>
