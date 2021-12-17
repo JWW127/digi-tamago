@@ -10,8 +10,12 @@ document.addEventListener(
     const bg = new Image();
     bg.src = "assets/backgrounds/moss-floor.png";
     window.requestAnimationFrame(init);
-    ctx.globalCompositeOperation = 'source-over'
-    
+    ctx.globalCompositeOperation = "source-over";
+
+    let userProfile = {
+      // user profile stuff for persistence.
+    };
+
     let slimeSprite = {
       spriteSheet: img,
       spriteStatus: 1,
@@ -47,7 +51,15 @@ document.addEventListener(
       dx: 0,
       dy: 0,
     };
+    //!--------------------------------------------------------------------------------
+    //modal start feature
+    const eggStartModal = document.getElementById("modal-start");
 
+    document.getElementById("orange-egg").addEventListener("click", () => {
+      // change userProfile persistence for choosing egg
+      eggStartModal.style.display = "none";
+    });
+    //!--------------------------------------------------------------------------------
     function updateSprite(spriteObj) {
       spriteObj.frameIndex = ++spriteObj.frameIndex % spriteObj.frameCount; // rotate frame index
       //------- animation move back and forth on canvas
@@ -71,7 +83,8 @@ document.addEventListener(
     });
 
     function initialSprite(spriteObj) {
-      ctx.drawImage(spriteObj.spriteSheet,
+      ctx.drawImage(
+        spriteObj.spriteSheet,
         (spriteObj.frameIndex * spriteObj.spriteLocationX) / 8,
         spriteObj.spriteLocationY,
         spriteObj.spriteWidth,
@@ -79,7 +92,8 @@ document.addEventListener(
         spriteObj.canvasLocationX,
         spriteObj.canvasLocationY,
         spriteObj.scaleX,
-        spriteObj.scaleY)
+        spriteObj.scaleY
+      );
     }
 
     function init() {
@@ -95,7 +109,7 @@ document.addEventListener(
         bgObj.scaleX,
         bgObj.scaleY
       );
-      initialSprite(slimeSprite)
+      initialSprite(slimeSprite);
 
       setTimeout(() => {
         requestAnimationFrame(init);
