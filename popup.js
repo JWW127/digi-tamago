@@ -6,19 +6,23 @@ document.addEventListener(
     const canvas = document.querySelector("canvas");
     const ctx = canvas.getContext("2d");
     const img = new Image();
-    img.src = "assets/slime/atk-slime.png";
     const bg = new Image();
+
+    let userProfile = {
+      choice: false,
+      egg: "orange",
+    };
+
+    img.src = `assets/slime/hop-slime-${userProfile.egg}.png`;
     bg.src = "assets/backgrounds/moss-floor.png";
+
     window.requestAnimationFrame(init);
     ctx.globalCompositeOperation = "source-over";
 
-    let userProfile = {
-      // user profile stuff for persistence.
-    };
-
+    //#--------------------------------- ASSET  SETTINGS -----------------------------------------
     let slimeSprite = {
       spriteSheet: img,
-      spriteStatus: 1,
+      spriteStatus: 3,
       spriteLocationX: 512,
       spriteLocationY: 10,
       spriteWidth: 64,
@@ -51,15 +55,55 @@ document.addEventListener(
       dx: 0,
       dy: 0,
     };
-    //!--------------------------------------------------------------------------------
-    //modal start feature
+
+    //# ------------------------- STORAGE/UserProfile --------------------------------------------
+
+    // chrome.storage.local.set(
+    //   {
+    //     userProfile: userProfile,
+    //   },
+    //   function () {
+    //     console.log("profile updated");
+    //   }
+    // );
+    chrome.storage.local.get("userProfile", function (result) {
+      console.log(result);
+    });
+
+    const userProfileUpdate = () => {
+      if (!userProfile.choice) {
+        modalInitializer();
+      } else {
+        eggStartModal.style.display = "none";
+      }
+    };
+
+    //#--------------------------------- MODALS -----------------------------------------
+
     const eggStartModal = document.getElementById("modal-start");
 
-    document.getElementById("orange-egg").addEventListener("click", () => {
-      // change userProfile persistence for choosing egg
-      eggStartModal.style.display = "none";
-    });
-    //!--------------------------------------------------------------------------------
+    function modalInitializer() {
+      document.getElementById("orange-egg").addEventListener("click", () => {
+        userProfile.egg = "orange";
+        userProfile.choice = true;
+        eggStartModal.style.display = "none";
+      });
+
+      document.getElementById("purple-egg").addEventListener("click", () => {
+        userProfile.egg = "purple";
+        userProfile.choice = true;
+        eggStartModal.style.display = "none";
+      });
+
+      document.getElementById("green-egg").addEventListener("click", () => {
+        userProfile.egg = "green";
+        userProfile.choice = true;
+        eggStartModal.style.display = "none";
+      });
+    }
+
+    //#--------------------------------- SPRITE UPDATE --------------------------------------
+
     function updateSprite(spriteObj) {
       spriteObj.frameIndex = ++spriteObj.frameIndex % spriteObj.frameCount; // rotate frame index
       //------- animation move back and forth on canvas
@@ -70,19 +114,31 @@ document.addEventListener(
       }
       //------------------------------------------------------
       if (spriteObj.spriteStatus === -1) {
-        img.src = "assets/slime/hop-slime.png";
+        img.src = `assets/slime/atk-slime-${userProfile.egg}.png`;
         spriteObj.spriteStatus *= -1;
       }
 
-      ctx.clearRect(0, 0, canvas.width, canvas.height); //wipe entire canvas
+      // exception for initial render img src
+      if (spriteObj.spriteStatus === 3) {
+        if (userProfile.choice === false) {
+          spriteObj.speed = 0;
+        }
+        if (userProfile.choice) {
+          img.src = `assets/slime/hop-slime-${userProfile.egg}.png`;
+          spriteObj.speed = 4;
+          spriteObj.spriteStatus = 1;
+        }
+      }
+
+      ctx.clearRect(0, 0, canvas.width, canvas.height); // clear canvas to prepare for next render
     }
 
     //changes spriteSheet src onClick
     document.getElementById("food").addEventListener("click", () => {
-      img.src = "assets/slime/atk-slime.png";
+      img.src = `assets/slime/atk-slime-${userProfile.egg}.png`;
     });
 
-    function initialSprite(spriteObj) {
+    const initialSprite = (spriteObj) => {
       ctx.drawImage(
         spriteObj.spriteSheet,
         (spriteObj.frameIndex * spriteObj.spriteLocationX) / 8,
@@ -94,10 +150,14 @@ document.addEventListener(
         spriteObj.scaleX,
         spriteObj.scaleY
       );
-    }
+    };
+
+    //#--------------------------------- GAME LOOP -----------------------------------------
 
     function init() {
       updateSprite(slimeSprite);
+      userProfileUpdate();
+      //draw our background
       ctx.drawImage(
         bgObj.spriteSheet,
         bgObj.spriteLocationX,
@@ -109,12 +169,14 @@ document.addEventListener(
         bgObj.scaleX,
         bgObj.scaleY
       );
+
+      //initialize our first sprite
       initialSprite(slimeSprite);
 
+      //continue animation loop
       setTimeout(() => {
         requestAnimationFrame(init);
       }, 100);
-      // requestAnimationFrame(init)
     }
   },
   false
