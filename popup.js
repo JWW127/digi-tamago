@@ -1,18 +1,22 @@
+import {modalInitializer} from './eggModal.js'
+
 document.addEventListener(
   "DOMContentLoaded",
   function () {
     //on load do some stuff
 
+    const eggStartModal = document.getElementById("modal-start");
     const canvas = document.querySelector("canvas");
     const ctx = canvas.getContext("2d");
     const img = new Image();
     const bg = new Image();
-
+    
+    
     let userProfile = {
       choice: false,
       egg: "orange",
     };
-
+    
     img.src = `assets/slime/hop-slime-${userProfile.egg}.png`;
     bg.src = "assets/backgrounds/moss-floor.png";
 
@@ -71,36 +75,17 @@ document.addEventListener(
     });
 
     const userProfileUpdate = () => {
+      // get userProfile from storage
+      // userProfile = saved.userProfile
+      // get time lapsed
+      // update sprite for time lapse events
+      // create new start time
       if (!userProfile.choice) {
-        modalInitializer();
+        modalInitializer(userProfile, eggStartModal);
       } else {
         eggStartModal.style.display = "none";
       }
     };
-
-    //#--------------------------------- MODALS -----------------------------------------
-
-    const eggStartModal = document.getElementById("modal-start");
-
-    function modalInitializer() {
-      document.getElementById("orange-egg").addEventListener("click", () => {
-        userProfile.egg = "orange";
-        userProfile.choice = true;
-        eggStartModal.style.display = "none";
-      });
-
-      document.getElementById("purple-egg").addEventListener("click", () => {
-        userProfile.egg = "purple";
-        userProfile.choice = true;
-        eggStartModal.style.display = "none";
-      });
-
-      document.getElementById("green-egg").addEventListener("click", () => {
-        userProfile.egg = "green";
-        userProfile.choice = true;
-        eggStartModal.style.display = "none";
-      });
-    }
 
     //#--------------------------------- SPRITE UPDATE --------------------------------------
 
@@ -141,7 +126,7 @@ document.addEventListener(
     const initialSprite = (spriteObj) => {
       ctx.drawImage(
         spriteObj.spriteSheet,
-        (spriteObj.frameIndex * spriteObj.spriteLocationX) / 8,
+        (spriteObj.frameIndex * spriteObj.spriteLocationX) / spriteObj.frameCount,
         spriteObj.spriteLocationY,
         spriteObj.spriteWidth,
         spriteObj.spriteHeight,
