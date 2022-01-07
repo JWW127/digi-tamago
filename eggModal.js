@@ -1,5 +1,4 @@
 
-
 export function modalInitializer(userProfile, modal) {
     document.getElementById("orange-egg").addEventListener("click", () => {
       userProfile.egg = "orange";

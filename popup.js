@@ -1,22 +1,27 @@
-import {modalInitializer} from './eggModal.js'
+import { modalInitializer } from "./eggModal.js";
+import { checkOne, userProfileUpdate } from "./profileUpdates.js";
 
 document.addEventListener(
   "DOMContentLoaded",
   function () {
     //on load do some stuff
-
     const eggStartModal = document.getElementById("modal-start");
     const canvas = document.querySelector("canvas");
     const ctx = canvas.getContext("2d");
     const img = new Image();
     const bg = new Image();
-    
-    
+
     let userProfile = {
       choice: false,
       egg: "orange",
+      sprite: {},
+      food: 0,
+      poop: 0,
+      play: 0,
+      sleep: 0,
+      sick: 0,
     };
-    
+
     img.src = `assets/slime/hop-slime-${userProfile.egg}.png`;
     bg.src = "assets/backgrounds/moss-floor.png";
 
@@ -26,7 +31,6 @@ document.addEventListener(
     //#--------------------------------- ASSET  SETTINGS -----------------------------------------
     let slimeSprite = {
       spriteSheet: img,
-      spriteStatus: 3,
       spriteLocationX: 512,
       spriteLocationY: 10,
       spriteWidth: 64,
@@ -40,6 +44,7 @@ document.addEventListener(
       speed: 4,
       dx: 1,
       dy: 1,
+      spriteStatus: 99,
     };
 
     let bgObj = {
@@ -74,22 +79,9 @@ document.addEventListener(
       console.log(result);
     });
 
-    const userProfileUpdate = () => {
-      // get userProfile from storage
-      // userProfile = saved.userProfile
-      // get time lapsed
-      // update sprite for time lapse events
-      // create new start time
-      if (!userProfile.choice) {
-        modalInitializer(userProfile, eggStartModal);
-      } else {
-        eggStartModal.style.display = "none";
-      }
-    };
-
     //#--------------------------------- SPRITE UPDATE --------------------------------------
 
-    function updateSprite(spriteObj) {
+    const updateSprite = (spriteObj) => {
       spriteObj.frameIndex = ++spriteObj.frameIndex % spriteObj.frameCount; // rotate frame index
       //------- animation move back and forth on canvas
       spriteObj.canvasLocationX += spriteObj.dx * spriteObj.speed;
@@ -104,7 +96,7 @@ document.addEventListener(
       }
 
       // exception for initial render img src
-      if (spriteObj.spriteStatus === 3) {
+      if (spriteObj.spriteStatus === 99) {
         if (userProfile.choice === false) {
           spriteObj.speed = 0;
         }
@@ -116,33 +108,9 @@ document.addEventListener(
       }
 
       ctx.clearRect(0, 0, canvas.width, canvas.height); // clear canvas to prepare for next render
-    }
-
-    //changes spriteSheet src onClick
-    document.getElementById("food").addEventListener("click", () => {
-      img.src = `assets/slime/atk-slime-${userProfile.egg}.png`;
-    });
-
-    const initialSprite = (spriteObj) => {
-      ctx.drawImage(
-        spriteObj.spriteSheet,
-        (spriteObj.frameIndex * spriteObj.spriteLocationX) / spriteObj.frameCount,
-        spriteObj.spriteLocationY,
-        spriteObj.spriteWidth,
-        spriteObj.spriteHeight,
-        spriteObj.canvasLocationX,
-        spriteObj.canvasLocationY,
-        spriteObj.scaleX,
-        spriteObj.scaleY
-      );
     };
 
-    //#--------------------------------- GAME LOOP -----------------------------------------
-
-    function init() {
-      updateSprite(slimeSprite);
-      userProfileUpdate();
-      //draw our background
+    const render = (bgObj, spriteObj) => {
       ctx.drawImage(
         bgObj.spriteSheet,
         bgObj.spriteLocationX,
@@ -155,8 +123,30 @@ document.addEventListener(
         bgObj.scaleY
       );
 
-      //initialize our first sprite
-      initialSprite(slimeSprite);
+      ctx.drawImage(
+        spriteObj.spriteSheet,
+        (spriteObj.frameIndex * spriteObj.spriteLocationX) /
+          spriteObj.frameCount,
+        spriteObj.spriteLocationY,
+        spriteObj.spriteWidth,
+        spriteObj.spriteHeight,
+        spriteObj.canvasLocationX,
+        spriteObj.canvasLocationY,
+        spriteObj.scaleX,
+        spriteObj.scaleY
+      );
+    };
+
+    //#--------------------------------- GAME LOOP -----------------------------------------
+    function init() {
+      updateSprite(userProfile.sprite);
+      userProfileUpdate(
+        userProfile,
+        slimeSprite,
+        modalInitializer,
+        eggStartModal
+      );
+      render(bgObj, userProfile.sprite); //renders bg and sprite
 
       //continue animation loop
       setTimeout(() => {
