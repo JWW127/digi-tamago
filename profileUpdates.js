@@ -19,14 +19,11 @@ export const userProfileUpdate = (
   modalInitializer,
   eggStartModal,
   saveStartTime
-  
 ) => {
-  setTimeout(() => {
-    if(userProfile.timeLapse > 200000){
-      saveStartTime()
+    if (userProfile.timeLapse > 200000) {
+      saveStartTime();
     }
-  }, 5000)
-  
+
   // checkPoop(userProfile)
   checkOne(userProfile, slimeSprite, modalInitializer, eggStartModal);
   // setProfile(userProfile);

@@ -15,9 +15,9 @@ document.addEventListener(
       choice: false,
       egg: "green",
       sprite: {},
-      startTime: 0,
-      endTime: 0,
-      timeLapse: 0,
+      startTime: Number,
+      endTime: Number,
+      timeLapse: Number,
       food: 0,
       poop: 0,
       play: 0,
@@ -25,59 +25,54 @@ document.addEventListener(
       sick: 0,
       foo: 0,
       bar: 0,
-      foobar: 0
+      foobar: 0,
     };
 
-  
     img.src = `assets/slime/hop-slime-${userProfile.egg}.png`;
     bg.src = "assets/backgrounds/moss-floor.png";
 
+    //? saves profile to storage
+    const saveProfile = async () => {
+      await chrome.storage.local.set({ userProfile: userProfile }, () => {
+        console.log("profile saved");
+      });
+    };
 
+    //? gets saved profile from storage and syncs profile to it
+    const syncProfile = async () => {
+      await chrome.storage.local.get("userProfile", (result) => {
+        if (Object.keys(result).length === 0) {
+          saveStartTime();
+        } else {
+          userProfile = result.userProfile;
+          console.log(userProfile);
+        }
+      });
+    };
 
-  //? saves profile to storage
-  let saveProfile = () => {
-    chrome.storage.local.set({"userProfile": userProfile}, () => {
-      console.log('profile saved')
-    })
-  }
-
-  //? gets saved profile from storage and syncs profile to it
-  let syncProfile = async() => {
-     chrome.storage.local.get("userProfile", (result) => {
-      userProfile = result.userProfile
-      console.log('🍕')
-      console.log(userProfile)
-    })  
-  }
-
-  //? create new start time and save to storage
+    //? create new start time and save to storage
     const saveStartTime = () => {
-      userProfile.startTime = Date.now()
-      saveProfile()
-      console.log('new startTime created and stored')
-    }
-   
-  //? get old startTime and sync to local 
-  let getStartTime = () => {
-    syncProfile()
-    console.log('old startTime received and synced')
-  }
+      userProfile.startTime = Date.now();
+      saveProfile();
+      console.log("new startTime created and stored");
+    };
 
-  //? compare old startTime with endTime
-  let getLapsedTime = () => {
-    let endTime = Date.now()
-    // console.log(endTime)
-    userProfile.timeLapse = endTime - userProfile.startTime
-    // console.log('timeLapse generated')
-    // saveStartTime()
-  }
+    //? compare old startTime with endTime
+    const getLapsedTime = () => {
+      let endTime = Date.now();
+      userProfile.timeLapse = endTime - userProfile.startTime;
+    };
 
-  // u need to await this some how
-   syncProfile()
+    const preLoad = async () => {
+      await syncProfile();
+      //! runtime bug with timeLapse uncomment below then inspect userProfile.timeLapse
+      // await syncProfile();
+      setTimeout(() => {
+        window.requestAnimationFrame(init);
+      }, 1000);
+    };
 
-
-
-    window.requestAnimationFrame(init);
+    preLoad();
     ctx.globalCompositeOperation = "source-over";
 
     //#--------------------------------- ASSET  SETTINGS -----------------------------------------
@@ -117,10 +112,6 @@ document.addEventListener(
       dy: 0,
     };
 
-    //# ------------------------- STORAGE/UserProfile --------------------------------------------
-
-  
-   
     //#--------------------------------- SPRITE UPDATE --------------------------------------
 
     const updateSprite = (spriteObj) => {
@@ -182,7 +173,7 @@ document.addEventListener(
     //#--------------------------------- GAME LOOP -----------------------------------------
     function init() {
       updateSprite(userProfile.sprite);
-      getLapsedTime()
+      getLapsedTime();
       userProfileUpdate(
         userProfile,
         slimeSprite,
@@ -191,7 +182,6 @@ document.addEventListener(
         saveStartTime
       );
       render(bgObj, userProfile.sprite); //renders bg and sprite
-        console.log(userProfile.timeLapse)
       //continue animation loop
       setTimeout(() => {
         requestAnimationFrame(init);
@@ -200,4 +190,3 @@ document.addEventListener(
   },
   false
 );
-
