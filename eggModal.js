@@ -4,6 +4,7 @@ export function modalInitializer(userProfile, modal) {
       userProfile.egg = "orange";
       userProfile.choice = true;
       modal.style.display = "none";
+      console.log(userProfile)
     });
 
     document.getElementById("purple-egg").addEventListener("click", () => {

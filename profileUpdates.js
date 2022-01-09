@@ -12,19 +12,22 @@ export const checkOne = (
   }
 };
 
+
 export const userProfileUpdate = (
   userProfile,
   slimeSprite,
   modalInitializer,
-  eggStartModal
+  eggStartModal,
+  saveStartTime
+  
 ) => {
-  // get userProfile from storage
-  // userProfile = saved.userProfile
-  // get time lapsed
-  // update sprite for time lapse events
-  // create new start time
-  // if(Object.keys(userProfile.sprite).length === 0) {
-  // }
-
+  setTimeout(() => {
+    if(userProfile.timeLapse > 200000){
+      saveStartTime()
+    }
+  }, 5000)
+  
+  // checkPoop(userProfile)
   checkOne(userProfile, slimeSprite, modalInitializer, eggStartModal);
+  // setProfile(userProfile);
 };

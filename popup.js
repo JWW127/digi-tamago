@@ -1,5 +1,5 @@
 import { modalInitializer } from "./eggModal.js";
-import { checkOne, userProfileUpdate } from "./profileUpdates.js";
+import { userProfileUpdate } from "./profileUpdates.js";
 
 document.addEventListener(
   "DOMContentLoaded",
@@ -10,20 +10,72 @@ document.addEventListener(
     const ctx = canvas.getContext("2d");
     const img = new Image();
     const bg = new Image();
-
+    // let endTime
     let userProfile = {
       choice: false,
-      egg: "orange",
+      egg: "green",
       sprite: {},
+      startTime: 0,
+      endTime: 0,
+      timeLapse: 0,
       food: 0,
       poop: 0,
       play: 0,
       sleep: 0,
       sick: 0,
+      foo: 0,
+      bar: 0,
+      foobar: 0
     };
 
+  
     img.src = `assets/slime/hop-slime-${userProfile.egg}.png`;
     bg.src = "assets/backgrounds/moss-floor.png";
+
+
+
+  //? saves profile to storage
+  let saveProfile = () => {
+    chrome.storage.local.set({"userProfile": userProfile}, () => {
+      console.log('profile saved')
+    })
+  }
+
+  //? gets saved profile from storage and syncs profile to it
+  let syncProfile = async() => {
+     chrome.storage.local.get("userProfile", (result) => {
+      userProfile = result.userProfile
+      console.log('🍕')
+      console.log(userProfile)
+    })  
+  }
+
+  //? create new start time and save to storage
+    const saveStartTime = () => {
+      userProfile.startTime = Date.now()
+      saveProfile()
+      console.log('new startTime created and stored')
+    }
+   
+  //? get old startTime and sync to local 
+  let getStartTime = () => {
+    syncProfile()
+    console.log('old startTime received and synced')
+  }
+
+  //? compare old startTime with endTime
+  let getLapsedTime = () => {
+    let endTime = Date.now()
+    // console.log(endTime)
+    userProfile.timeLapse = endTime - userProfile.startTime
+    // console.log('timeLapse generated')
+    // saveStartTime()
+  }
+
+  // u need to await this some how
+   syncProfile()
+
+
 
     window.requestAnimationFrame(init);
     ctx.globalCompositeOperation = "source-over";
@@ -67,18 +119,8 @@ document.addEventListener(
 
     //# ------------------------- STORAGE/UserProfile --------------------------------------------
 
-    // chrome.storage.local.set(
-    //   {
-    //     userProfile: userProfile,
-    //   },
-    //   function () {
-    //     console.log("profile updated");
-    //   }
-    // );
-    chrome.storage.local.get("userProfile", function (result) {
-      console.log(result);
-    });
-
+  
+   
     //#--------------------------------- SPRITE UPDATE --------------------------------------
 
     const updateSprite = (spriteObj) => {
@@ -140,14 +182,16 @@ document.addEventListener(
     //#--------------------------------- GAME LOOP -----------------------------------------
     function init() {
       updateSprite(userProfile.sprite);
+      getLapsedTime()
       userProfileUpdate(
         userProfile,
         slimeSprite,
         modalInitializer,
-        eggStartModal
+        eggStartModal,
+        saveStartTime
       );
       render(bgObj, userProfile.sprite); //renders bg and sprite
-
+        console.log(userProfile.timeLapse)
       //continue animation loop
       setTimeout(() => {
         requestAnimationFrame(init);
@@ -156,3 +200,4 @@ document.addEventListener(
   },
   false
 );
+
