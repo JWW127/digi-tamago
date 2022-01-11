@@ -10,7 +10,8 @@ document.addEventListener(
     const ctx = canvas.getContext("2d");
     const img = new Image();
     const bg = new Image();
-    // let endTime
+
+    //! need to change to class and move from global scope
     let userProfile = {
       choice: false,
       egg: "green",
@@ -23,9 +24,6 @@ document.addEventListener(
       play: 0,
       sleep: 0,
       sick: 0,
-      foo: 0,
-      bar: 0,
-      foobar: 0,
     };
 
     img.src = `assets/slime/hop-slime-${userProfile.egg}.png`;
@@ -76,6 +74,7 @@ document.addEventListener(
     ctx.globalCompositeOperation = "source-over";
 
     //#--------------------------------- ASSET  SETTINGS -----------------------------------------
+    //! need to make a sprite class and remove these from global scope
     let slimeSprite = {
       spriteSheet: img,
       spriteLocationX: 512,

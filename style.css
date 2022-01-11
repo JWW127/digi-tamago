@@ -123,7 +123,8 @@ body {
 /* ----------------------------------start------------------------ */
 #modal-start {
   display: block;
-  color: rgb(206, 152, 16);
+  color: rgb(173, 125, 2);
+  text-shadow: 13px 8px 8px #413e1e8a;
   border: rgb(206, 152, 16) 3px groove;
 }
 
